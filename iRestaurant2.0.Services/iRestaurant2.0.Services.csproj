@@ -54,11 +54,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DishService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Signature_DishService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iRestaurant2.0.Data\iRestaurant2.0.Data.csproj">
+      <Project>{EDABCD7B-12A5-4212-BD42-4198CEEDE9E5}</Project>
+      <Name>iRestaurant2.0.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\iRestaurant2.0.Models\iRestaurant2.0.Models.csproj">
+      <Project>{6D3153CA-E9CC-47AA-821D-C9C2116EFC85}</Project>
+      <Name>iRestaurant2.0.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
