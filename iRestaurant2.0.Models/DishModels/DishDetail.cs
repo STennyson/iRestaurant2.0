@@ -1,4 +1,5 @@
 ﻿using iRestaurant2._0.Data;
+using iRestaurant2._0.Models.IngredientModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace iRestaurant2._0.Models.DishModels
     {
         public int DishID { get; set; }
         public string Name { get; set; }
-        public virtual List<string> IngredientsInDish { get; set; }
+        public List<IngredientListItem> IngredientsInDish { get; set; }
     }
 }

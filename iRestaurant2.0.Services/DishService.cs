@@ -5,6 +5,7 @@ using iRestaurant2._0.Models.IngredientModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,27 +21,48 @@ namespace iRestaurant2._0.Services
         //}
         public bool CreateDish(DishCreate model)
         {
+                bool allWentWell = false;
             var entity =
                 new Dish()
                 {
                     Name = model.Name,
-                    //IngredientsInDish = model.IngredientsInDish,
+                   // IngredientsInDish = model.IngredientsInDish,
                 };
 
             using (var ctx = new ApplicationDbContext())
             {
                 ctx.Dishes.Add(entity);
-                return ctx.SaveChanges() == 1;
+                // return ctx.SaveChanges() == 1;
+                var success = ctx.SaveChanges() == 1;
+
+                foreach(var ingredientInDish in model.IngredientsInDish)
+                {
+                    var ingredient =
+                        new IngredientInDishCreate()
+                        {
+                            DishID = entity.DishID,
+                           IngredientID = Convert.ToInt32(ingredientInDish)
+                        };
+                    var succeeded = CreateIngredientInDish(ingredient);
+                    //break the code or decide what you'll do if succeeded == false;
+                    // if succeeded is false, return allWentWell
+                }
+
+                allWentWell = true;
             }
+                return allWentWell;
+
+
+
         }
 
-        public bool CreateIngredientInDish(IngredientInDishCreate model)
+        public bool CreateIngredientInDish(IngredientInDishCreate ingredientModel)
         {
             var entity =
                 new IngredientInDish()
                 {
-                    DishID = model.DishID,
-                    IngredientID = model.IngredientID,
+                    DishID = ingredientModel.DishID,
+                    IngredientID = ingredientModel.IngredientID,
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -93,7 +115,7 @@ namespace iRestaurant2._0.Services
                     ctx
                         .IngredientsInDish
                         .Where(e => e.DishID == dishID)
-                        .Select(
+                        .Select( //Select is essentially a For Each Loop
                             e =>
                                 new IngredientListItem
                                 {
@@ -134,13 +156,25 @@ namespace iRestaurant2._0.Services
                     ctx
                         .Dishes
                         .Single(e => e.DishID == id /* && e.UserID == _userId*/);
-                return
-                    new DishDetail
+
+                List<IngredientListItem> ingredientListItems = new List<IngredientListItem>();
+                foreach(var ingredient in entity.IngredientsInDish)
+                {
+                    var potato = new IngredientListItem ()
+                    {
+                        IngredientID = ingredient.IngredientID,
+                        Name = ingredient.Ingredient.Name,
+                        Type = ingredient.Ingredient.Type
+                    };
+                    ingredientListItems.Add(potato);
+                }
+                   var dish = new DishDetail
                     {
                         DishID = entity.DishID,
                         Name = entity.Name,
-                        IngredientsInDish = (List<string>) entity.IngredientsInDish,
+                        IngredientsInDish = ingredientListItems
                     };
+                return dish;
             }
         }
         public bool UpdateDish(DishEdit model)
@@ -151,7 +185,7 @@ namespace iRestaurant2._0.Services
                     ctx
                         .Dishes
                         .Single(e => e.DishID == model.DishID /*&& e.UserID == _userId*/);
-
+                entity.DishID = model.DishID;
                 entity.Name = model.Name;
                 //entity.IngredientsInDish = model.IngredientsInDish;
 

@@ -1,4 +1,5 @@
 ﻿using iRestaurant2._0.Data;
+using iRestaurant2._0.Models.IngredientInDishModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,6 @@ namespace iRestaurant2._0.Models.DishModels
         [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; }
+        public int[] IngredientsInDish { get; set; } = new int[2]; //maybe get with Casey to clean this up later, low priority
     }
 }
