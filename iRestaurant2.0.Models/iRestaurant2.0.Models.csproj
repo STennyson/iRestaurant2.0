@@ -57,38 +57,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-
     <Compile Include="ChefModels\ChefCreate.cs" />
     <Compile Include="ChefModels\ChefDetail.cs" />
     <Compile Include="ChefModels\ChefEdit.cs" />
     <Compile Include="ChefModels\ChefListItem.cs" />
-
     <Compile Include="DishModels\DishCreate.cs" />
     <Compile Include="DishModels\DishDetail.cs" />
     <Compile Include="DishModels\DishEdit.cs" />
     <Compile Include="DishModels\DishListItem.cs" />
-
+    <Compile Include="IngredientInDishModels\IngredientInDishCreate.cs" />
     <Compile Include="IngredientModels\IngredientCreate.cs" />
     <Compile Include="IngredientModels\IngredientDetail.cs" />
     <Compile Include="IngredientModels\IngredientEdit.cs" />
     <Compile Include="IngredientModels\IngredientListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Signature_Dish\Signature_DishCreate.cs" />
-    <Compile Include="Signature_Dish\Signature_DishDetail.cs" />
-    <Compile Include="Signature_Dish\Signature_DishEdit.cs" />
-    <Compile Include="Signature_Dish\Signature_DishListItem.cs" />
+    <Compile Include="Signature_DishModels\Signature_DishCreate.cs" />
+    <Compile Include="Signature_DishModels\Signature_DishDetail.cs" />
+    <Compile Include="Signature_DishModels\Signature_DishEdit.cs" />
+    <Compile Include="Signature_DishModels\Signature_DishListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\iRestaurant2.0.Data\iRestaurant2.0.Data.csproj">
       <Project>{EDABCD7B-12A5-4212-BD42-4198CEEDE9E5}</Project>
       <Name>iRestaurant2.0.Data</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

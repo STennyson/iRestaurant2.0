@@ -12,10 +12,16 @@ namespace iRestaurant2._0.WebAPI.Controllers
     [Authorize]
     public class ChefController : ApiController
     {
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get()
         {
             ChefService ChefService = CreateChefService();
             var chefs = ChefService.GetChefs();
+            return Ok(chefs);
+        }
+        public IHttpActionResult Get(int id)
+        {
+            ChefService chefService = CreateChefService();
+            var chefs = chefService.GetChefById(id);
             return Ok(chefs);
         }
         public IHttpActionResult Post(ChefCreate Chef)
@@ -30,14 +36,14 @@ namespace iRestaurant2._0.WebAPI.Controllers
 
             return Ok();
         }
-        public IHttpActionResult Put(ChefEdit note)
+        public IHttpActionResult Put(ChefEdit chef)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var service = CreateChefService();
 
-            if (!service.UpdateNote(note))
+            if (!service.UpdateChef(chef))
                 return InternalServerError();
 
             return Ok();

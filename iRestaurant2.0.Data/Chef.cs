@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +17,11 @@ namespace iRestaurant2._0.Data
 
         public string Speciality { get; set; }
 
-        public Signature_Dish SignatureDish { get; set; }
+        [ForeignKey("SignatureDish")]
+        public int Signature_DishID { get; set; }
+
+        [Required]
+        public virtual Signature_Dish SignatureDish { get; set; } = new Signature_Dish();
 
 
     }

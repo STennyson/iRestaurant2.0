@@ -10,10 +10,13 @@ namespace iRestaurant2._0.Data
 {
     public class Signature_Dish : Dish
     {
+        [Key]
+        public int Signature_DishID { get; set; }
         
-        [ForeignKey("SignatureChef")]
-        public int ChefID { get; set; }
-        public virtual Chef SignatureChef { get; set; }
+        //[ForeignKey("Chef")]
+        //public int ChefID { get; set; }
+        //[Required]
+        //public virtual Chef Chef { get; set; } = new Chef();
 
     }
 }
