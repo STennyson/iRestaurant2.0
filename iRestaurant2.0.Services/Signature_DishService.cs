@@ -1,5 +1,5 @@
 ﻿using iRestaurant2._0.Data;
-using iRestaurant2._0.Models.Signature_Dish;
+using iRestaurant2._0.Models.Signature_DishModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace iRestaurant2._0.Services
                                 {
                                     DishID = e.DishID,
                                     Name = e.Name,
-                                    SigChef = e.SignatureChef
+                                    Chef = e.Chef
                                 }
                         );
 
@@ -68,7 +68,7 @@ namespace iRestaurant2._0.Services
                     {
                         DishID = entity.DishID,
                         Name = entity.Name,
-                        SigChef = entity.SignatureChef,
+                        Chef = entity.Chef,
                         IngredientsInDish = entity.IngredientsInDish
 
 

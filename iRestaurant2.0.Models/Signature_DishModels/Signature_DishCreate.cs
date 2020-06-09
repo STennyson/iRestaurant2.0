@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iRestaurant2._0.Models.Signature_Dish
+namespace iRestaurant2._0.Models.Signature_DishModels
 {
     public class Signature_DishCreate
     {

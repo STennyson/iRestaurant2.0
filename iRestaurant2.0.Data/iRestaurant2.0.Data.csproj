@@ -92,12 +92,22 @@
     <Compile Include="IdentityModels.cs" />
     <Compile Include="Ingredient.cs" />
     <Compile Include="IngredientInDish.cs" />
+    <Compile Include="Migrations\202006091326323_initialMigration.cs" />
+    <Compile Include="Migrations\202006091326323_initialMigration.designer.cs">
+      <DependentUpon>202006091326323_initialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Signature_Dish.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202006091326323_initialMigration.resx">
+      <DependentUpon>202006091326323_initialMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

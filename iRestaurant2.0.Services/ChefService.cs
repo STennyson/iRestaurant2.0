@@ -66,7 +66,7 @@ namespace iRestaurant2._0.Services
                     };
             }
         }
-        public bool UpdateNote(ChefEdit model)
+        public bool UpdateChef(ChefEdit model)
         {
             using (var ctx = new ApplicationDbContext())
             {

@@ -17,7 +17,7 @@ namespace iRestaurant2._0.Data
         [Required]
         public IngredientType Type { get; set; }
 
-        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; } //you need a joining table
+        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; } = new List<IngredientInDish>(); //you need a joining table
 
     }
 }

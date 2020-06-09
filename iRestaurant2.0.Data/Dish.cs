@@ -14,7 +14,7 @@ namespace iRestaurant2._0.Data
         [Required]
         public string Name { get; set; }
 
-        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; }
+        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; } = new List<IngredientInDish>();
 
 
     }

@@ -33,6 +33,7 @@ namespace iRestaurant2._0.WebAPI.Controllers
             return Ok(dish);
         }
 
+
         public IHttpActionResult Post(DishCreate dish)
         {
             if (!ModelState.IsValid)
@@ -63,6 +64,16 @@ namespace iRestaurant2._0.WebAPI.Controllers
             var service = CreateDishService();
 
             if (!service.DeleteDish(id))
+                return InternalServerError();
+
+            return Ok();
+        }
+        [HttpDelete]
+        public IHttpActionResult DeleteIngredient(int id)
+        {
+            var service = CreateDishService();
+
+            if (!service.DeleteIngredientInDish(id))
                 return InternalServerError();
 
             return Ok();

@@ -1,5 +1,7 @@
 ﻿using iRestaurant2._0.Data;
 using iRestaurant2._0.Models.DishModels;
+using iRestaurant2._0.Models.IngredientInDishModels;
+using iRestaurant2._0.Models.IngredientModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +24,42 @@ namespace iRestaurant2._0.Services
                 new Dish()
                 {
                     Name = model.Name,
-                    IngredientsInDish = model.IngredientsInDish,
+                    //IngredientsInDish = model.IngredientsInDish,
                 };
 
             using (var ctx = new ApplicationDbContext())
             {
                 ctx.Dishes.Add(entity);
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
+        public bool CreateIngredientInDish(IngredientInDishCreate model)
+        {
+            var entity =
+                new IngredientInDish()
+                {
+                    DishID = model.DishID,
+                    IngredientID = model.IngredientID,
+                };
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                ctx.IngredientsInDish.Add(entity);
+                return ctx.SaveChanges() == 1;
+            }
+        }
+        public bool DeleteIngredientInDish(int dishId)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .IngredientsInDish
+                        .Single(e => e.DishID == dishId /*&& e.UserID == _userId*/);
+
+                ctx.IngredientsInDish.Remove(entity);
+
                 return ctx.SaveChanges() == 1;
             }
         }
@@ -53,8 +85,49 @@ namespace iRestaurant2._0.Services
             }
         }
 
+        public IEnumerable<IngredientListItem> GetIngredientsInDish(int dishID)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                        .IngredientsInDish
+                        .Where(e => e.DishID == dishID)
+                        .Select(
+                            e =>
+                                new IngredientListItem
+                                {
+                                    Name = e.Ingredient.Name,
+                                }
+                        );
+
+                return query.ToArray();
+            }
+        }
+        public IEnumerable<DishListItem> GetDishesByIngredient(int ingredientID)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                        .IngredientsInDish
+                        .Where(e => e.IngredientID == ingredientID)
+                        .Select(
+                            e =>
+                                new DishListItem
+                                {
+                                    Name = e.Dish.Name,
+                                }
+                        );
+
+                return query.ToArray();
+            }
+        }
+
         public DishDetail GetDishById(int id)
         {
+            
+
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
@@ -66,8 +139,7 @@ namespace iRestaurant2._0.Services
                     {
                         DishID = entity.DishID,
                         Name = entity.Name,
-                        IngredientsInDish = entity.IngredientsInDish,
-
+                        IngredientsInDish = (List<string>) entity.IngredientsInDish,
                     };
             }
         }
@@ -81,7 +153,7 @@ namespace iRestaurant2._0.Services
                         .Single(e => e.DishID == model.DishID /*&& e.UserID == _userId*/);
 
                 entity.Name = model.Name;
-                entity.IngredientsInDish = model.IngredientsInDish;
+                //entity.IngredientsInDish = model.IngredientsInDish;
 
                 return ctx.SaveChanges() == 1;
             }

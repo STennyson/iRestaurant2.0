@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iRestaurant2._0.Models.Signature_Dish
+namespace iRestaurant2._0.Models.Signature_DishModels
 {
-    public class Signature_DishEdit
+    public class Signature_DishListItem
     {
         public int DishID { get; set; }
         public string Name { get; set; }
-        public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; }
+
+        public Chef Chef { get; set; } //might need a foreign key?
     }
 }
