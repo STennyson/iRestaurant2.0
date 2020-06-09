@@ -11,7 +11,5 @@ namespace iRestaurant2._0.Models.Signature_DishModels
     {
         public int DishID { get; set; }
         public string Name { get; set; }
-
-        public Chef Chef { get; set; } //might need a foreign key?
     }
 }

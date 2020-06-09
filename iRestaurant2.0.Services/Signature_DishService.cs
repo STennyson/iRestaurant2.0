@@ -23,7 +23,6 @@ namespace iRestaurant2._0.Services
                 {
                     Name = model.Name,
                     IngredientsInDish = model.IngredientsInDish,
-                    ChefID = model.ChefID
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -47,7 +46,6 @@ namespace iRestaurant2._0.Services
                                 {
                                     DishID = e.DishID,
                                     Name = e.Name,
-                                    Chef = e.Chef
                                 }
                         );
 
@@ -68,7 +66,6 @@ namespace iRestaurant2._0.Services
                     {
                         DishID = entity.DishID,
                         Name = entity.Name,
-                        Chef = entity.Chef,
                         IngredientsInDish = entity.IngredientsInDish
 
 

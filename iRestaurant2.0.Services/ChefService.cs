@@ -17,6 +17,7 @@ namespace iRestaurant2._0.Services
                 {
                     Full_Name = model.Full_Name,
                     Speciality = model.Speciality,
+                    Signature_DishID = model.Signature_DishID
                 };
 
             using (var ctx = new ApplicationDbContext())
