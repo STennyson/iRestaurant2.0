@@ -14,6 +14,6 @@ namespace iRestaurant2._0.Models.DishModels
         [Required]
         public string Name { get; set; }
 
-        public int[] IngredientsInDish { get; set; } = new int[2]; //maybe get with Casey to clean this up later, low priority
+        public int[] IngredientsInDish { get; set; } = new int[100]; //maybe get with Casey to clean this up later, low priority
     }
 }

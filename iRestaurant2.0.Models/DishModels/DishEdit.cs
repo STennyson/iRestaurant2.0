@@ -11,6 +11,7 @@ namespace iRestaurant2._0.Models.DishModels
     {
         public int DishID { get; set; }
         public string Name { get; set; }
-        //public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; }
+        
+        public int[] IngredientsInDish { get; set; }
     }
 }

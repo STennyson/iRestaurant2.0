@@ -17,11 +17,10 @@ namespace iRestaurant2._0.Data
 
         public string Speciality { get; set; }
 
-        [ForeignKey("SignatureDish")]
-        public int Signature_DishID { get; set; }
+       // [ForeignKey("SignatureDish")]
+       // public int DishID { get; set; }
 
-        [Required]
-        public virtual Signature_Dish SignatureDish { get; set; } = new Signature_Dish();
+       // public virtual Dish SignatureDish { get; set; } = new Dish();
 
 
     }

@@ -12,12 +12,13 @@ namespace iRestaurant2._0.Services
     {
         public bool CreateChef(ChefCreate model)
         {
+            //var dish = DishNameReference(model.DishID);
             var entity =
                 new Chef()
                 {
                     Full_Name = model.Full_Name,
                     Speciality = model.Speciality,
-                    Signature_DishID = model.Signature_DishID
+                    //DishID = dish.DishID
                 };
 
             using (var ctx = new ApplicationDbContext())
@@ -26,7 +27,18 @@ namespace iRestaurant2._0.Services
                 return ctx.SaveChanges() == 1;
             }
         }
-
+        public Dish DishNameReference(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Dishes
+                        .Single(e => e.DishID == id /* && e.UserID == _userId*/);
+                return entity;
+            }
+            return null;
+        }
         public IEnumerable<ChefListItem> GetChefs()
         {
             using (var ctx = new ApplicationDbContext())
@@ -42,7 +54,7 @@ namespace iRestaurant2._0.Services
                                     ChefID = e.ChefID,
                                     Full_Name = e.Full_Name,
                                     Speciality = e.Speciality,
-                                    SignatureDish = e.SignatureDish
+                                    //SignatureDish = e.SignatureDish
                                 }
                         );
 
@@ -63,7 +75,7 @@ namespace iRestaurant2._0.Services
                         ChefID = entity.ChefID,
                         Full_Name = entity.Full_Name,
                         Speciality = entity.Speciality,
-                        SignatureDish = entity.SignatureDish
+                        //SignatureDish = entity.SignatureDish
                     };
             }
         }

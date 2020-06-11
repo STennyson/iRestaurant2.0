@@ -60,7 +60,6 @@ namespace iRestaurant2._0.Services
                         IngredientID = entity.IngredientID,
                         Name = entity.Name,
                         Type = entity.Type,
-                        IngredientInDishes = (List<string>) entity.IngredientsInDish,
                     };
             }
         }

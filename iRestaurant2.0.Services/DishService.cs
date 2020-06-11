@@ -4,6 +4,8 @@ using iRestaurant2._0.Models.IngredientInDishModels;
 using iRestaurant2._0.Models.IngredientModels;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -71,6 +73,25 @@ namespace iRestaurant2._0.Services
                 return ctx.SaveChanges() == 1;
             }
         }
+
+        public bool UpdateIngredientInDish(IngredientInDishEdit model)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .IngredientsInDish
+                        .Single(e => e.DishID == model.DishID);
+
+                entity.IngredientInDishID = model.IngredientInDishID;
+                entity.DishID = model.DishID;
+                entity.IngredientID = model.IngredientID;
+
+                return ctx.SaveChanges() == 1;
+            }
+        }
+
+
         public bool DeleteIngredientInDish(int dishId)
         {
             using (var ctx = new ApplicationDbContext())
@@ -177,20 +198,57 @@ namespace iRestaurant2._0.Services
                 return dish;
             }
         }
-        public bool UpdateDish(DishEdit model)
+        public bool UpdateDish(DishEdit model) //model has ID, the new name, and a List of the new/old ingredients.
         {
+            //bool allWentWell = false;
+            //We need to create a new IngredientInDish that shows a change in relationship
+
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
                     ctx
                         .Dishes
-                        .Single(e => e.DishID == model.DishID /*&& e.UserID == _userId*/);
-                entity.DishID = model.DishID;
-                entity.Name = model.Name;
-                //entity.IngredientsInDish = model.IngredientsInDish;
+                        .Single(e => e.DishID == model.DishID);
 
-                return ctx.SaveChanges() == 1;
+
+
+                // query in IndgredientsInDIsh table for entities with model.DishID
+                // delete those entities
+                var iidEntity =
+                    ctx
+                        .IngredientsInDish
+                        .Select(e => e.DishID == model.DishID);
+                //foreach (DataRow row in iidEntity.Rows)
+                foreach (var oldIngredients in ctx.IngredientsInDish)
+                {
+                    var happy = ctx.IngredientsInDish.Remove(oldIngredients);
+                }
+                ctx.SaveChanges();
+                // try and get a count == 0 for validation
+                var succeed = ctx.IngredientsInDish.Count() == 0;
+
+               // entity.DishID = model.DishID;
+                entity.Name = model.Name;
+
+                // create new IndgredientInDish entities for each ingredient in the model's list of ingredients
+
+                foreach (var newIngredients in model.IngredientsInDish)
+                {
+                    var ingredient =
+                        new IngredientInDishCreate()
+                        {
+                            DishID = entity.DishID,
+                            IngredientID = newIngredients
+                        };
+                    var succeeded = CreateIngredientInDish(ingredient);
+                    //break the code or decide what you'll do if succeeded == false;
+                    // if succeeded is false, return allWentWell
+                }
+               // allWentWell = true;
+             ctx.SaveChanges();
             }
+            //return allWentWell;
+            return true; //plug in whatever validation you see fit to determine whether this method was successful
         }
 
         public bool DeleteDish(int dishId)
