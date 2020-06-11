@@ -12,6 +12,6 @@ namespace iRestaurant2._0.Models.ChefModels
         [Required]
         public string Full_Name { get; set; }
         public string Speciality { get; set; }
-        public int Signature_DishID { get; set; }
+        //public int DishID { get; set; }
     }
 }

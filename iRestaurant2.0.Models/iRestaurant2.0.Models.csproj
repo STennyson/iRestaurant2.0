@@ -66,16 +66,13 @@
     <Compile Include="DishModels\DishEdit.cs" />
     <Compile Include="DishModels\DishListItem.cs" />
     <Compile Include="IngredientInDishModels\IngredientInDishCreate.cs" />
+    <Compile Include="IngredientInDishModels\IngredientInDishEdit.cs" />
     <Compile Include="IngredientInDishModels\IngredientToAdd.cs" />
     <Compile Include="IngredientModels\IngredientCreate.cs" />
     <Compile Include="IngredientModels\IngredientDetail.cs" />
     <Compile Include="IngredientModels\IngredientEdit.cs" />
     <Compile Include="IngredientModels\IngredientListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Signature_DishModels\Signature_DishCreate.cs" />
-    <Compile Include="Signature_DishModels\Signature_DishDetail.cs" />
-    <Compile Include="Signature_DishModels\Signature_DishEdit.cs" />
-    <Compile Include="Signature_DishModels\Signature_DishListItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

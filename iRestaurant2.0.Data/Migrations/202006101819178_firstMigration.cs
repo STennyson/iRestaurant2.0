@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initialMigration : DbMigration
+    public partial class firstMigration : DbMigration
     {
         public override void Up()
         {
@@ -14,11 +14,8 @@
                         ChefID = c.Int(nullable: false, identity: true),
                         Full_Name = c.String(nullable: false),
                         Speciality = c.String(),
-                        Signature_DishID = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.ChefID)
-                .ForeignKey("dbo.Dish", t => t.Signature_DishID, cascadeDelete: true)
-                .Index(t => t.Signature_DishID);
+                .PrimaryKey(t => t.ChefID);
             
             CreateTable(
                 "dbo.Dish",
@@ -26,8 +23,6 @@
                     {
                         DishID = c.Int(nullable: false, identity: true),
                         Name = c.String(nullable: false),
-                        Signature_DishID = c.Int(),
-                        Discriminator = c.String(nullable: false, maxLength: 128),
                     })
                 .PrimaryKey(t => t.DishID);
             
@@ -133,7 +128,6 @@
             DropForeignKey("dbo.IdentityUserLogin", "ApplicationUser_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.IdentityUserClaim", "ApplicationUser_Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.IdentityUserRole", "IdentityRole_Id", "dbo.IdentityRole");
-            DropForeignKey("dbo.Chef", "Signature_DishID", "dbo.Dish");
             DropForeignKey("dbo.IngredientInDish", "IngredientID", "dbo.Ingredient");
             DropForeignKey("dbo.IngredientInDish", "DishID", "dbo.Dish");
             DropIndex("dbo.IdentityUserLogin", new[] { "ApplicationUser_Id" });
@@ -142,7 +136,6 @@
             DropIndex("dbo.IdentityUserRole", new[] { "IdentityRole_Id" });
             DropIndex("dbo.IngredientInDish", new[] { "IngredientID" });
             DropIndex("dbo.IngredientInDish", new[] { "DishID" });
-            DropIndex("dbo.Chef", new[] { "Signature_DishID" });
             DropTable("dbo.IdentityUserLogin");
             DropTable("dbo.IdentityUserClaim");
             DropTable("dbo.ApplicationUser");

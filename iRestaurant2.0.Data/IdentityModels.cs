@@ -35,7 +35,6 @@ namespace iRestaurant2._0.Data
         }
         public DbSet<Chef> Chefs { get; set; }
         public DbSet<Dish> Dishes { get; set; }
-        public DbSet<Signature_Dish> Signature_Dishes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngredientInDish> IngredientsInDish { get; set; }
 
