@@ -10,7 +10,9 @@ namespace iRestaurant2._0.Services
 {
     public class ChefService
     {
+
         private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
         public bool CreateChef(ChefCreate model)
         {
             var entity =
