@@ -10,91 +10,71 @@ namespace iRestaurant2._0.Services
 {
     public class IngredientService
     {
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
+
         public bool CreateIngredient(IngredientCreate model)
         {
             var entity =
                 new Ingredient()
                 {
                     Name = model.Name,
-                    Type = model.Type
+                    Type = model.Type,
                 };
-
-            using (var ctx = new ApplicationDbContext())
-            {
-                ctx.Ingredients.Add(entity);
-                return ctx.SaveChanges() == 1;
-            }
+            _context.Ingredients.Add(entity);
+            return _context.SaveChanges() == 1;
         }
+
         public IEnumerable<IngredientListItem> GetIngredients()
         {
-            using (var ctx = new ApplicationDbContext())
+            var ingredientEntities = _context.Ingredients.ToList();
+            var ingredientList = ingredientEntities.Select(c => new IngredientListItem
             {
-                var query =
-                    ctx
-                        .Ingredients
-                        //.Where(e => e.IngredientID == IngredientID)
-                        .Select(
-                            e =>
-                                new IngredientListItem
-                                {
-                                    IngredientID = e.IngredientID,
-                                    Name = e.Name,
-                                    Type = e.Type,
-                                }
-                        );
+                IngredientID = c.IngredientID,
+                Name = c.Name,
+                Type = c.Type
+            }).ToList();
 
-                return query.ToArray();
-            }
+            return ingredientList;
         }
+
         public IngredientDetail GetIngredientByID(int id)
         {
-            using (var ctx = new ApplicationDbContext())
+            var ingredientEntity = _context.Ingredients.Find(id);
+            if (ingredientEntity == null)
+                return null;
+
+            var detail = new IngredientDetail
             {
-                var entity =
-                    ctx
-                        .Ingredients
-                        .Single(e => e.IngredientID == id);
-                return
-                    new IngredientDetail
-                    {
-                        IngredientID = entity.IngredientID,
-                        Name = entity.Name,
-                        Type = entity.Type,
-                    };
-            }
+                IngredientID = ingredientEntity.IngredientID,
+                Name = ingredientEntity.Name,
+                Type = ingredientEntity.Type
+            };
+            return detail;
         }
+
         public bool UpdateIngredient(IngredientEdit model)
         {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .Ingredients
-                        .Single(e => e.IngredientID == model.IngredientID);
+            var ingredientEntity = _context.Ingredients.Find(model.IngredientID);
+            if (ingredientEntity == null)
+                return false;
 
-                entity.IngredientID = model.IngredientID;
-                entity.Name = model.Name;
-                entity.Type = model.Type;
+            ingredientEntity.IngredientID = model.IngredientID;
+            ingredientEntity.Name = model.Name;
+            ingredientEntity.Type = model.Type;
 
-                return ctx.SaveChanges() == 1;
-            }
+            return _context.SaveChanges() == 1;
         }
+
         public bool DeleteIngredient(int IngredientID)
         {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .Ingredients
-                        .Single(e => e.IngredientID == IngredientID);
+            var entity = _context.Ingredients.Find(IngredientID);
+            if (entity == null)
+                return false;
 
-                ctx.Ingredients.Remove(entity);
+            _context.Ingredients.Remove(entity);
 
-                return ctx.SaveChanges() == 1;
-            }
+            return _context.SaveChanges() == 1;
         }
-
-
     }
 }
 

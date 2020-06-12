@@ -12,15 +12,10 @@ namespace iRestaurant2._0.WebAPI.Controllers
     [Authorize]
     public class IngredientController : ApiController
     {
-        private IngredientService CreateIngredientService()
-        {
-            var ingredientService = new IngredientService();
-            return ingredientService;
-
-        }
+        public IngredientService ingredientService = new IngredientService();
+        
         public IHttpActionResult Get()
         {
-            IngredientService ingredientService = CreateIngredientService();
             var ingredients = ingredientService.GetIngredients();
             return Ok(ingredients);
         }
@@ -30,16 +25,13 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateIngredientService();
-
-            if (!service.CreateIngredient(ingredient))
+            if (!ingredientService.CreateIngredient(ingredient))
                 return InternalServerError();
 
             return Ok();
         }
         public IHttpActionResult Get(int id)
         {
-            IngredientService ingredientService = CreateIngredientService();
             var ingredient = ingredientService.GetIngredientByID(id);
             return Ok(ingredient);
         }
@@ -48,18 +40,14 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateIngredientService();
-
-            if (!service.UpdateIngredient(note))
+            if (!ingredientService.UpdateIngredient(note))
                 return InternalServerError();
 
             return Ok();
         }
         public IHttpActionResult Delete(int id)
         {
-            var service = CreateIngredientService();
-
-            if (!service.DeleteIngredient(id))
+            if (!ingredientService.DeleteIngredient(id))
                 return InternalServerError();
 
             return Ok();

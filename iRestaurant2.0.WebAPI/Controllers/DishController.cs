@@ -9,26 +9,19 @@ using System.Web.Http;
 
 namespace iRestaurant2._0.WebAPI.Controllers
 {
+        [Authorize]
     public class DishController : ApiController
     {
-        [Authorize]
-        private DishService CreateDishService()
-        {
-            //var userId = Guid.Parse(User.Identity.GetUserId());
-            var dishService = new DishService(/*userId*/);
-            return dishService;
-        }
-
+        public DishService dishService = new DishService();
+        
         public IHttpActionResult Get()
         {
-            DishService dishService = CreateDishService();
             var dishes = dishService.GetDishes();
             return Ok(dishes);
         }
 
         public IHttpActionResult Get(int id)
         {
-            DishService dishService = CreateDishService();
             var dish = dishService.GetDishById(id);
             return Ok(dish);
         }
@@ -40,9 +33,8 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateDishService();
 
-            if (!service.CreateDish(dish))
+            if (!dishService.CreateDish(dish))
                 return InternalServerError();
 
 
@@ -54,18 +46,15 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateDishService();
-
-            if (!service.UpdateDish(dish))
+            if (!dishService.UpdateDish(dish))
                 return InternalServerError();
 
             return Ok();
         }
         public IHttpActionResult Delete(int id)
         {
-            var service = CreateDishService();
 
-            if (!service.DeleteDish(id))
+            if (!dishService.DeleteDish(id))
                 return InternalServerError();
 
             return Ok();

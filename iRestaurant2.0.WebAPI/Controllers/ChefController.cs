@@ -1,5 +1,7 @@
-﻿using iRestaurant2._0.Models.ChefModels;
+﻿using iRestaurant2._0.Data;
+using iRestaurant2._0.Models.ChefModels;
 using iRestaurant2._0.Services;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +14,14 @@ namespace iRestaurant2._0.WebAPI.Controllers
     [Authorize]
     public class ChefController : ApiController
     {
+        public ChefService chefService = new ChefService();
         public IHttpActionResult Get()
         {
-            ChefService ChefService = CreateChefService();
-            var chefs = ChefService.GetChefs();
+            var chefs = chefService.GetChefs();
             return Ok(chefs);
         }
         public IHttpActionResult Get(int id)
         {
-            ChefService chefService = CreateChefService();
             var chefs = chefService.GetChefById(id);
             return Ok(chefs);
         }
@@ -29,9 +30,7 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateChefService();
-
-            if (!service.CreateChef(Chef))
+            if (!chefService.CreateChef(Chef))
                 return InternalServerError();
 
             return Ok();
@@ -41,28 +40,18 @@ namespace iRestaurant2._0.WebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var service = CreateChefService();
-
-            if (!service.UpdateChef(chef))
+            if (!chefService.UpdateChef(chef))
                 return InternalServerError();
 
             return Ok();
         }
         public IHttpActionResult Delete(int id)
         {
-            var service = CreateChefService();
 
-            if (!service.DeleteChef(id))
+            if (chefService.DeleteChef(id))
                 return InternalServerError();
 
             return Ok();
-        }
-
-        private ChefService CreateChefService()
-        {
-            //var userId = Guid.Parse(User.Identity.GetChefId());
-            var ChefService = new ChefService();
-            return ChefService;
         }
     }
 }

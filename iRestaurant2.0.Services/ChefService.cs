@@ -10,104 +10,67 @@ namespace iRestaurant2._0.Services
 {
     public class ChefService
     {
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
         public bool CreateChef(ChefCreate model)
         {
-            //var dish = DishNameReference(model.DishID);
             var entity =
                 new Chef()
                 {
                     Full_Name = model.Full_Name,
                     Speciality = model.Speciality,
-                    //DishID = dish.DishID
                 };
+            _context.Chefs.Add(entity);
+            return _context.SaveChanges() == 1;
+        }
 
-            using (var ctx = new ApplicationDbContext())
-            {
-                ctx.Chefs.Add(entity);
-                return ctx.SaveChanges() == 1;
-            }
-        }
-        public Dish DishNameReference(int id)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .Dishes
-                        .Single(e => e.DishID == id /* && e.UserID == _userId*/);
-                return entity;
-            }
-            return null;
-        }
         public IEnumerable<ChefListItem> GetChefs()
         {
-            using (var ctx = new ApplicationDbContext())
+            var chefEntities = _context.Chefs.ToList();
+            var chefList = chefEntities.Select(c => new ChefListItem
             {
-                var query =
-                    ctx
-                        .Chefs
-                        //.Where(e => e.OwnerId == _userId)
-                        .Select(
-                            e =>
-                                new ChefListItem
-                                {
-                                    ChefID = e.ChefID,
-                                    Full_Name = e.Full_Name,
-                                    Speciality = e.Speciality,
-                                    //SignatureDish = e.SignatureDish
-                                }
-                        );
+                ChefID = c.ChefID,
+                Full_Name = c.Full_Name,
+                Speciality = c.Speciality
+            }).ToList();
 
-                return query.ToArray();
-            }
+            return chefList;
         }
+
         public ChefDetail GetChefById(int id)
         {
-            using (var ctx = new ApplicationDbContext())
+            var chefEntity = _context.Chefs.Find(id);
+            if (chefEntity == null)
+                return null;
+
+            var detail = new ChefDetail
             {
-                var entity =
-                    ctx
-                        .Chefs
-                        .Single(e => e.ChefID == id /*&& e.OwnerId == _userId*/);
-                return
-                    new ChefDetail
-                    {
-                        ChefID = entity.ChefID,
-                        Full_Name = entity.Full_Name,
-                        Speciality = entity.Speciality,
-                        //SignatureDish = entity.SignatureDish
-                    };
-            }
+                ChefID = chefEntity.ChefID,
+                Full_Name = chefEntity.Full_Name,
+                Speciality = chefEntity.Speciality
+            };
+            return detail;
         }
         public bool UpdateChef(ChefEdit model)
         {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .Chefs
-                        .Single(e => e.ChefID == model.ChefID /*&& e.OwnerId == _userId*/);
+            var chefEntity = _context.Chefs.Find(model.ChefID);
+            if (chefEntity == null)
+                return false;
 
-                entity.ChefID = model.ChefID;
-                entity.Full_Name = model.Full_Name;
-                entity.Speciality = model.Speciality;
+            chefEntity.ChefID = model.ChefID;
+            chefEntity.Full_Name = model.Full_Name;
+            chefEntity.Speciality = model.Speciality;
 
-                return ctx.SaveChanges() == 1;
-            }
+            return _context.SaveChanges() == 1;
         }
         public bool DeleteChef(int chefId)
         {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .Chefs
-                        .Single(e => e.ChefID == chefId /*&& e.OwnerId == _userId*/);
+            var chefEntity = _context.Chefs.Find(chefId);
+            if (chefEntity == null)
+                return false;
 
-                ctx.Chefs.Remove(entity);
+            _context.Chefs.Remove(chefEntity);
 
-                return ctx.SaveChanges() == 1;
-            }
+            return _context.SaveChanges() == 1;
         }
     }
 }
