@@ -15,12 +15,7 @@ namespace iRestaurant2._0.Services
 {
     public class DishService
     {
-        //private readonly Guid _userId;
-
-        //public DishService(Guid userId)
-        //{
-        // _userId = userId;
-        //}
+        private readonly ApplicationDbContext _context = new ApplicationDbContext();
         public bool CreateDish(DishCreate model)
         {
                 bool allWentWell = false;
