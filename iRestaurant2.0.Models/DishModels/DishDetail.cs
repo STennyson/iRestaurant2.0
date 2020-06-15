@@ -13,5 +13,6 @@ namespace iRestaurant2._0.Models.DishModels
         public int DishID { get; set; }
         public string Name { get; set; }
         public List<IngredientListItem> IngredientsInDish { get; set; }
+        public double TotalPrice { get; set; }
     }
 }

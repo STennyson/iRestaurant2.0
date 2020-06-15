@@ -16,6 +16,8 @@ namespace iRestaurant2._0.Data
         public string Name { get; set; }
         [Required]
         public IngredientType Type { get; set; }
+        [Required]
+        public double Price { get; set; }
 
         public virtual ICollection<IngredientInDish> IngredientsInDish { get; set; } = new List<IngredientInDish>(); //you need a joining table
 

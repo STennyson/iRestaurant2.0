@@ -48,7 +48,7 @@ namespace iRestaurant2._0.WebAPI.Controllers
         public IHttpActionResult Delete(int id)
         {
 
-            if (chefService.DeleteChef(id))
+            if (!chefService.DeleteChef(id))
                 return InternalServerError();
 
             return Ok();

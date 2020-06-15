@@ -12,5 +12,7 @@ namespace iRestaurant2._0.Models.IngredientModels
         public string Name { get; set; }
 
         public IngredientType Type { get; set; }
+
+        public double Price { get; set; }
     }
 }
