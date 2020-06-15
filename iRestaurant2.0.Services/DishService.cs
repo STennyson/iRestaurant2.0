@@ -15,30 +15,27 @@ namespace iRestaurant2._0.Services
 {
     public class DishService
     {
-        private readonly ApplicationDbContext _context = new ApplicationDbContext();
         public bool CreateDish(DishCreate model)
         {
-                bool allWentWell = false;
+            bool allWentWell = false;
             var entity =
                 new Dish()
                 {
                     Name = model.Name,
-                   // IngredientsInDish = model.IngredientsInDish,
                 };
 
             using (var ctx = new ApplicationDbContext())
             {
                 ctx.Dishes.Add(entity);
-                // return ctx.SaveChanges() == 1;
                 var success = ctx.SaveChanges() == 1;
 
-                foreach(var ingredientInDish in model.IngredientsInDish)
+                foreach (var ingredientInDish in model.IngredientsInDish)
                 {
                     var ingredient =
                         new IngredientInDishCreate()
                         {
                             DishID = entity.DishID,
-                           IngredientID = Convert.ToInt32(ingredientInDish)
+                            IngredientID = Convert.ToInt32(ingredientInDish)
                         };
                     var succeeded = CreateIngredientInDish(ingredient);
                     //break the code or decide what you'll do if succeeded == false;
@@ -47,7 +44,7 @@ namespace iRestaurant2._0.Services
 
                 allWentWell = true;
             }
-                return allWentWell;
+            return allWentWell;
 
 
 
@@ -86,7 +83,7 @@ namespace iRestaurant2._0.Services
             }
         }
 
-
+        //For Future Refactoring
         public bool DeleteIngredientInDish(int dishId)
         {
             using (var ctx = new ApplicationDbContext())
@@ -94,7 +91,7 @@ namespace iRestaurant2._0.Services
                 var entity =
                     ctx
                         .IngredientsInDish
-                        .Single(e => e.DishID == dishId /*&& e.UserID == _userId*/);
+                        .Single(e => e.DishID == dishId);
 
                 ctx.IngredientsInDish.Remove(entity);
 
@@ -109,7 +106,6 @@ namespace iRestaurant2._0.Services
                 var query =
                     ctx
                         .Dishes
-                        //.Where(e => e.UserID == _userId)
                         .Select(
                             e =>
                                 new DishListItem
@@ -131,7 +127,7 @@ namespace iRestaurant2._0.Services
                     ctx
                         .IngredientsInDish
                         .Where(e => e.DishID == dishID)
-                        .Select( //Select is essentially a For Each Loop
+                        .Select(
                             e =>
                                 new IngredientListItem
                                 {
@@ -164,40 +160,41 @@ namespace iRestaurant2._0.Services
 
         public DishDetail GetDishById(int id)
         {
-            
+
 
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
                     ctx
                         .Dishes
-                        .Single(e => e.DishID == id /* && e.UserID == _userId*/);
+                        .Single(e => e.DishID == id);
 
                 List<IngredientListItem> ingredientListItems = new List<IngredientListItem>();
-                foreach(var ingredient in entity.IngredientsInDish)
+                foreach (var ingredient in entity.IngredientsInDish)
                 {
-                    var potato = new IngredientListItem ()
+                    var potato = new IngredientListItem()
                     {
                         IngredientID = ingredient.IngredientID,
                         Name = ingredient.Ingredient.Name,
-                        Type = ingredient.Ingredient.Type
+                        Type = ingredient.Ingredient.Type,
+                        Price = ingredient.Ingredient.Price
                     };
                     ingredientListItems.Add(potato);
                 }
-                   var dish = new DishDetail
-                    {
-                        DishID = entity.DishID,
-                        Name = entity.Name,
-                        IngredientsInDish = ingredientListItems
-                    };
+                var total = PriceCalc(entity.DishID);
+                
+                    var dish = new DishDetail
+                {
+                    DishID = entity.DishID,
+                    Name = entity.Name,
+                    IngredientsInDish = ingredientListItems,
+                    TotalPrice = total
+                };
                 return dish;
             }
         }
-        public bool UpdateDish(DishEdit model) //model has ID, the new name, and a List of the new/old ingredients.
+        public bool UpdateDish(DishEdit model)
         {
-            //bool allWentWell = false;
-            //We need to create a new IngredientInDish that shows a change in relationship
-
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
@@ -205,27 +202,18 @@ namespace iRestaurant2._0.Services
                         .Dishes
                         .Single(e => e.DishID == model.DishID);
 
-
-
-                // query in IndgredientsInDIsh table for entities with model.DishID
-                // delete those entities
                 var iidEntity =
                     ctx
                         .IngredientsInDish
                         .Select(e => e.DishID == model.DishID);
-                //foreach (DataRow row in iidEntity.Rows)
                 foreach (var oldIngredients in ctx.IngredientsInDish)
                 {
                     var happy = ctx.IngredientsInDish.Remove(oldIngredients);
                 }
                 ctx.SaveChanges();
-                // try and get a count == 0 for validation
                 var succeed = ctx.IngredientsInDish.Count() == 0;
 
-               // entity.DishID = model.DishID;
                 entity.Name = model.Name;
-
-                // create new IndgredientInDish entities for each ingredient in the model's list of ingredients
 
                 foreach (var newIngredients in model.IngredientsInDish)
                 {
@@ -239,8 +227,8 @@ namespace iRestaurant2._0.Services
                     //break the code or decide what you'll do if succeeded == false;
                     // if succeeded is false, return allWentWell
                 }
-               // allWentWell = true;
-             ctx.SaveChanges();
+                // allWentWell = true;
+                ctx.SaveChanges();
             }
             //return allWentWell;
             return true; //plug in whatever validation you see fit to determine whether this method was successful
@@ -253,12 +241,45 @@ namespace iRestaurant2._0.Services
                 var entity =
                     ctx
                         .Dishes
-                        .Single(e => e.DishID == dishId /*&& e.UserID == _userId*/);
+                        .Single(e => e.DishID == dishId);
 
                 ctx.Dishes.Remove(entity);
 
                 return ctx.SaveChanges() == 1;
             }
+        }
+        
+        public double PriceCalc(int id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                        .Dishes
+                        .Single(e => e.DishID == id);
+
+                List<IngredientListItem> myList = new List<IngredientListItem>();
+
+                foreach (var ingredient in entity.IngredientsInDish)
+                {
+
+                    var dollar = new IngredientListItem()
+                    {
+                        IngredientID = ingredient.IngredientID,
+                        Name = ingredient.Ingredient.Name,
+                        Type = ingredient.Ingredient.Type,
+                        Price = ingredient.Ingredient.Price
+                    };
+                    myList.Add(dollar);
+
+                }
+                var priceList = myList.Select(x => x.Price).ToArray();
+                return priceList.Sum();
+            }
+
+
+
+
         }
     }
 }

@@ -19,6 +19,7 @@ namespace iRestaurant2._0.Services
                 {
                     Name = model.Name,
                     Type = model.Type,
+                    Price = model.Price
                 };
             _context.Ingredients.Add(entity);
             return _context.SaveChanges() == 1;
@@ -31,7 +32,8 @@ namespace iRestaurant2._0.Services
             {
                 IngredientID = c.IngredientID,
                 Name = c.Name,
-                Type = c.Type
+                Type = c.Type,
+                Price = c.Price
             }).ToList();
 
             return ingredientList;
@@ -47,7 +49,8 @@ namespace iRestaurant2._0.Services
             {
                 IngredientID = ingredientEntity.IngredientID,
                 Name = ingredientEntity.Name,
-                Type = ingredientEntity.Type
+                Type = ingredientEntity.Type,
+                Price = ingredientEntity.Price
             };
             return detail;
         }
@@ -61,6 +64,7 @@ namespace iRestaurant2._0.Services
             ingredientEntity.IngredientID = model.IngredientID;
             ingredientEntity.Name = model.Name;
             ingredientEntity.Type = model.Type;
+            ingredientEntity.Price = model.Price;
 
             return _context.SaveChanges() == 1;
         }

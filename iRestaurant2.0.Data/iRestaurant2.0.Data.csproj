@@ -96,6 +96,10 @@
     <Compile Include="Migrations\202006101819178_firstMigration.designer.cs">
       <DependentUpon>202006101819178_firstMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006151808305_Price.cs" />
+    <Compile Include="Migrations\202006151808305_Price.designer.cs">
+      <DependentUpon>202006151808305_Price.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -106,6 +110,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202006101819178_firstMigration.resx">
       <DependentUpon>202006101819178_firstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006151808305_Price.resx">
+      <DependentUpon>202006151808305_Price.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

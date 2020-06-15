@@ -66,7 +66,9 @@
     <Compile Include="DishModels\DishEdit.cs" />
     <Compile Include="DishModels\DishListItem.cs" />
     <Compile Include="IngredientInDishModels\IngredientInDishCreate.cs" />
+    <Compile Include="IngredientInDishModels\IngredientInDishDetail.cs" />
     <Compile Include="IngredientInDishModels\IngredientInDishEdit.cs" />
+    <Compile Include="IngredientInDishModels\IngredientInDishListItem.cs" />
     <Compile Include="IngredientInDishModels\IngredientToAdd.cs" />
     <Compile Include="IngredientModels\IngredientCreate.cs" />
     <Compile Include="IngredientModels\IngredientDetail.cs" />
