@@ -1,6 +1,6 @@
 # iRestaurant2.0
 
-<h3>Welcome to our Eleven Fifty Academy, Blue Badge Project, iRestaurant2.0.</h3>
+<h3>Welcome to the Eleven Fifty Academy, Blue Badge Project, iRestaurant2.0.</h3>
 <br>
 <p><b>Description:</b> A simple API for restaurant managers and owners, to track chefs, dishes, ingredients and pricing.</p>
 <br>
