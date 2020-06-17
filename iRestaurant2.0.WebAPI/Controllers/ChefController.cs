@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace iRestaurant2._0.WebAPI.Controllers
@@ -20,10 +21,16 @@ namespace iRestaurant2._0.WebAPI.Controllers
             var chefs = chefService.GetChefs();
             return Ok(chefs);
         }
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            var chefs = chefService.GetChefById(id);
-            return Ok(chefs);
+            ApplicationDbContext _context = new ApplicationDbContext();
+            Chef chef = await _context.Chefs.FindAsync(id);
+            if (chef != null)
+            {
+                var chef1 = chefService.GetChefById(id);
+                return Ok(chef1);
+            }
+            return NotFound();
         }
         public IHttpActionResult Post(ChefCreate Chef)
         {

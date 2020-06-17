@@ -17,37 +17,40 @@ namespace iRestaurant2._0.Services
     {
         public bool CreateDish(DishCreate model)
         {
-            bool allWentWell = false;
-            var entity =
-                new Dish()
-                {
-                    Name = model.Name,
-                };
-
-            using (var ctx = new ApplicationDbContext())
+            try
             {
-                ctx.Dishes.Add(entity);
-                var success = ctx.SaveChanges() == 1;
+                bool allWentWell = false;
+                var entity =
+                    new Dish()
+                    {
+                        Name = model.Name,
+                    };
 
-                foreach (var ingredientInDish in model.IngredientsInDish)
+                using (var ctx = new ApplicationDbContext())
                 {
-                    var ingredient =
-                        new IngredientInDishCreate()
-                        {
-                            DishID = entity.DishID,
-                            IngredientID = Convert.ToInt32(ingredientInDish)
-                        };
-                    var succeeded = CreateIngredientInDish(ingredient);
-                    //break the code or decide what you'll do if succeeded == false;
-                    // if succeeded is false, return allWentWell
+                    ctx.Dishes.Add(entity);
+                    var success = ctx.SaveChanges() == 1;
+
+                    foreach (var ingredientInDish in model.IngredientsInDish)
+                    {
+                        var ingredient =
+                            new IngredientInDishCreate()
+                            {
+                                DishID = entity.DishID,
+                                IngredientID = Convert.ToInt32(ingredientInDish)
+                            };
+                        var succeeded = CreateIngredientInDish(ingredient);
+                        //break the code or decide what you'll do if succeeded == false;
+                        // if succeeded is false, return allWentWell
+                    }
+                    allWentWell = true;
                 }
-
-                allWentWell = true;
+                return allWentWell;
             }
-            return allWentWell;
-
-
-
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public bool CreateIngredientInDish(IngredientInDishCreate ingredientModel)
@@ -83,22 +86,6 @@ namespace iRestaurant2._0.Services
             }
         }
 
-        //For Future Refactoring
-        public bool DeleteIngredientInDish(int dishId)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                        .IngredientsInDish
-                        .Single(e => e.DishID == dishId);
-
-                ctx.IngredientsInDish.Remove(entity);
-
-                return ctx.SaveChanges() == 1;
-            }
-        }
-
         public IEnumerable<DishListItem> GetDishes()
         {
             using (var ctx = new ApplicationDbContext())
@@ -118,46 +105,6 @@ namespace iRestaurant2._0.Services
                 return query.ToArray();
             }
         }
-
-        public IEnumerable<IngredientListItem> GetIngredientsInDish(int dishID)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var query =
-                    ctx
-                        .IngredientsInDish
-                        .Where(e => e.DishID == dishID)
-                        .Select(
-                            e =>
-                                new IngredientListItem
-                                {
-                                    Name = e.Ingredient.Name,
-                                }
-                        );
-
-                return query.ToArray();
-            }
-        }
-        public IEnumerable<DishListItem> GetDishesByIngredient(int ingredientID)
-        {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var query =
-                    ctx
-                        .IngredientsInDish
-                        .Where(e => e.IngredientID == ingredientID)
-                        .Select(
-                            e =>
-                                new DishListItem
-                                {
-                                    Name = e.Dish.Name,
-                                }
-                        );
-
-                return query.ToArray();
-            }
-        }
-
         public DishDetail GetDishById(int id)
         {
 
@@ -182,8 +129,8 @@ namespace iRestaurant2._0.Services
                     ingredientListItems.Add(potato);
                 }
                 var total = PriceCalc(entity.DishID);
-                
-                    var dish = new DishDetail
+
+                var dish = new DishDetail
                 {
                     DishID = entity.DishID,
                     Name = entity.Name,
@@ -197,41 +144,48 @@ namespace iRestaurant2._0.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                var entity =
-                    ctx
-                        .Dishes
-                        .Single(e => e.DishID == model.DishID);
-
-                var iidEntity =
-                    ctx
-                        .IngredientsInDish
-                        .Select(e => e.DishID == model.DishID);
-                foreach (var oldIngredients in ctx.IngredientsInDish)
+                try
                 {
-                    var happy = ctx.IngredientsInDish.Remove(oldIngredients);
+                    var entity =
+                      ctx
+                          .Dishes
+                          .Single(e => e.DishID == model.DishID);
+                    if (entity == null)
+                        return false;
+
+
+                    var iidEntity =
+                        ctx
+                            .IngredientsInDish
+                            .Select(e => e.DishID == model.DishID);
+
+                    foreach (var oldIngredients in ctx.IngredientsInDish)
+                    {
+                        var happy = ctx.IngredientsInDish.Remove(oldIngredients);
+                    }
+                    ctx.SaveChanges();
+                    var succeed = ctx.IngredientsInDish.Count() == 0;
+
+                    entity.Name = model.Name;
+
+                    foreach (var newIngredients in model.IngredientsInDish)
+                    {
+                        var ingredient =
+                            new IngredientInDishCreate()
+                            {
+                                DishID = entity.DishID,
+                                IngredientID = newIngredients
+                            };
+                        var succeeded = CreateIngredientInDish(ingredient);
+                    }
+                    ctx.SaveChanges();
                 }
-                ctx.SaveChanges();
-                var succeed = ctx.IngredientsInDish.Count() == 0;
-
-                entity.Name = model.Name;
-
-                foreach (var newIngredients in model.IngredientsInDish)
+                catch (Exception e)
                 {
-                    var ingredient =
-                        new IngredientInDishCreate()
-                        {
-                            DishID = entity.DishID,
-                            IngredientID = newIngredients
-                        };
-                    var succeeded = CreateIngredientInDish(ingredient);
-                    //break the code or decide what you'll do if succeeded == false;
-                    // if succeeded is false, return allWentWell
+                    return false;
                 }
-                // allWentWell = true;
-                ctx.SaveChanges();
             }
-            //return allWentWell;
-            return true; //plug in whatever validation you see fit to determine whether this method was successful
+            return true;
         }
 
         public bool DeleteDish(int dishId)
@@ -248,7 +202,7 @@ namespace iRestaurant2._0.Services
                 return ctx.SaveChanges() == 1;
             }
         }
-        
+
         public double PriceCalc(int id)
         {
             using (var ctx = new ApplicationDbContext())

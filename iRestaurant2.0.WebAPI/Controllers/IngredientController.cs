@@ -1,10 +1,12 @@
-﻿using iRestaurant2._0.Models.IngredientModels;
+﻿using iRestaurant2._0.Data;
+using iRestaurant2._0.Models.IngredientModels;
 using iRestaurant2._0.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace iRestaurant2._0.WebAPI.Controllers
@@ -30,10 +32,16 @@ namespace iRestaurant2._0.WebAPI.Controllers
 
             return Ok();
         }
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            var ingredient = ingredientService.GetIngredientByID(id);
-            return Ok(ingredient);
+            ApplicationDbContext _context = new ApplicationDbContext();
+            Ingredient ingredient = await _context.Ingredients.FindAsync(id);
+            if (ingredient != null)
+            {
+                var ingredient1 = ingredientService.GetIngredientByID(id);
+                return Ok(ingredient1);
+            }
+            return NotFound();
         }
         public IHttpActionResult Put(IngredientEdit note)
         {
