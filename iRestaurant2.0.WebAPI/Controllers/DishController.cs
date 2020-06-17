@@ -1,10 +1,12 @@
-﻿using iRestaurant2._0.Models.DishModels;
+﻿using iRestaurant2._0.Data;
+using iRestaurant2._0.Models.DishModels;
 using iRestaurant2._0.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace iRestaurant2._0.WebAPI.Controllers
@@ -20,13 +22,20 @@ namespace iRestaurant2._0.WebAPI.Controllers
             return Ok(dishes);
         }
 
-        public IHttpActionResult Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            var dish = dishService.GetDishById(id);
-            return Ok(dish);
+            ApplicationDbContext _context = new ApplicationDbContext();
+            Dish dish = await _context.Dishes.FindAsync(id);
+            if (dish != null)
+            {
+                var dish1 = dishService.GetDishById(id);
+                return Ok(dish1);
+            }
+            return NotFound();
+
         }
 
-        
+
         public IHttpActionResult Post(DishCreate dish)
         {
             
